@@ -4,23 +4,41 @@ import React, { useState } from 'react'
 export default function TextForm(props) {
     const handleUpClick = () => {
         let newText = text.toUpperCase()
-        setText(newText)
+        setText(newText);
+        props.alert("Converted to Uppercase!", "success")
     }
 
     const handleLowerClick = () => {
         let newText = text.toLowerCase()
-        setText(newText)
+        setText(newText);
+        props.alert("Converted to Lowercase!", "success")
     }
 
     const handleClearClick = () => {
         let newText = ''
-        setText(newText)
+        setText(newText);
+        props.alert("Textbox clear!", "success")
     }
 
     const handleTitleCaseClick = () => {
         let newText = text.toLowerCase().split(" ").reduce((s, c) =>
             s + "" + (c.charAt(0).toUpperCase() + c.slice(1) + " "), '');
-        setText(newText)
+        setText(newText);
+        props.alert("Converted to Titlecase!", "success");
+    }
+
+    
+    const handleOnText = () => {
+        let newText = text;
+        console.log('newText',newText);
+        // setText(newText);
+        // props.alert("Text Reversed !", "success");
+        // const element = document.querySelector('#myBox');
+        // console.log(element)
+        // element.select();
+        // element.setSelectionRange(0, 99999);
+        // document.execCommand('copy');
+        // props.alert("Text Copied!", "success");
     }
 
     const handleCopyClick = () => {
@@ -29,21 +47,47 @@ export default function TextForm(props) {
         element.select();
         element.setSelectionRange(0, 99999);
         document.execCommand('copy');
-        alert('Text copied')
+        props.alert("Text Copied!", "success");
     }
 
     const handleOnChange = (event) => {
         setText(event.target.value)
-    }
-
-
+    }   
+    const handleOnChangeReplace = (event) => {
+        ReplaceText(event.target.value)
+    }  
+    
     const HandleReverseString = () => {
         let newText = text.split("").reverse().join("");
-        setText(newText)
+        setText(newText);
+        props.alert("Text Reversed !", "success");
+    }
+
+    const handleRemoveExtraSpaceClick = () => {
+        var regexPattern = /\s+/g;
+        let newText = text.replace(regexPattern, " ");
+        // let newText = text.split("").reverse().join("");
+        setText(newText);
+        props.alert("Extra Space Removed !", "success");
+    }
+
+    const handleReplaceWord = () => {
+        // let originalString = "The color of the sky changes throughout the day.";
+        // let fText = findText
+        let fText = findText.replace(findText, ReplaceText(findText));
+        console.log(fText);
+        // ReplaceText(newText);
+        props.alert("Extra Space Removed !", "success");
+    }
+    
+    const handleRemoveSpaceClick = () => {
+        let newText = text.split(" ").join("")
+        setText(newText);
+        props.alert("All Space Removed !", "success");
     }
 
     const downloadTxtFile = () => {
-        let newText = text.toLowerCase()
+        let newText = text
         setText(newText)
         console.log('newText', newText);
         // text content
@@ -58,42 +102,60 @@ export default function TextForm(props) {
         // simulate link click
         document.body.appendChild(element); // Required for this to work in FireFox
         element.click();
+        props.alert("Text Downloaded!", "success");
     }
 
-    const googleTranslateElementInit = () => {
-        new window.google.translate.TranslateElement({ pageLanguage: 'en' }, 'google_translate_element');
-    }
+    // const googleTranslateElementInit = () => {
+    //     new window.google.translate.TranslateElement({ pageLanguage: 'en' }, 'google_translate_element');
+    // }
 
     const [text, setText] = useState('');
-    // setText = 'abcd'
+    const [findText, ReplaceText] = useState('');
     return (
         <>
-            <div className="container" style={{ color: props.mode === 'dark' ? 'white' : '#06234d' }}>
+            <div className="container" style={{ color: props.mode === 'info' ? 'white' : '#06234d' }}>
                 <div className="mb-3">
-                    <h1>{props.heading}</h1>
-                    <textarea className="form-control" id="myBox" placeholder="Enter Text Here" value={text}
+                    <h2 className="text-center">{props.heading}</h2>
+                    <textarea className="form-control" placeholder="Enter Text Here"
                         onChange={handleOnChange} rows="10"
                         style={{
-                            backgroundColor: props.mode === 'dark' ? '#7b99c5' : 'white',
-                            color: props.mode === 'dark' ? 'white' : '#06234d'
+                            backgroundColor: props.mode === 'info' ? '#7b99c5' : 'white',
+                            color: props.mode === 'info' ? 'white' : '#06234d'
                         }}></textarea>
+                        <input type="text" value={findText} onClick={handleOnText}
+                        onChange={handleOnChangeReplace}/>
                 </div>
-                <button className="btn btn-primary" onClick={handleUpClick}>Convert To UpperCase</button>
-                <button className="btn btn-primary mx-2" onClick={handleLowerClick}>Convert To LowerCase</button>
-                <button className="btn btn-primary mx-2" onClick={handleTitleCaseClick}>Convert To TitleCase</button>
-                <button className="btn btn-primary mx-2" onClick={handleClearClick}>Clear</button>
-                <button className="btn btn-primary mx-2" onClick={handleCopyClick}>Copy</button>
-                <button className="btn btn-primary mx-2" id="downloadBtn" onClick={downloadTxtFile} value="download">Download</button>
-                <button className="btn btn-primary mx-2" onClick={HandleReverseString} value="download">Inverse Case</button>
-                <button className="btn btn-primary mx-2" onClick={googleTranslateElementInit} value="download">Translate</button>
+                <button className={`btn btn-${props.mode === 'info' ? 'info' : 'primary'}`} type="button" data-bs-toggle="collapse" data-bs-target="#collapseWidthExample" aria-expanded="false" aria-controls="collapseWidthExample">
+                    Convert to <span><i className="fa fa-caret-down" aria-hidden="true"></i></span>
+                </button>
+                <button className={`btn btn-${props.mode === 'info' ? 'info' : 'primary'} mx-2`} onClick={handleCopyClick}>Copy</button>
+                <button className={`btn btn-${props.mode === 'info' ? 'info' : 'primary'} mx-2`} onClick={handleClearClick}>Clear</button>
+                <button className={`btn btn-${props.mode === 'info' ? 'info' : 'primary'} mx-2`} onClick={handleRemoveExtraSpaceClick}>Extra Space</button>
+                <button className={`btn btn-${props.mode === 'info' ? 'info' : 'primary'} mx-2`} onClick={handleRemoveSpaceClick}>Remove Space</button>
+                <button className={`btn btn-${props.mode === 'info' ? 'info' : 'primary'} mx-2`} onClick={handleReplaceWord}>Replace Word</button>
+                <button className={`btn btn-${props.mode === 'info' ? 'info' : 'primary'} mx-2`} id="downloadBtn" onClick={downloadTxtFile} value="download">Download Text</button>
+                <div style={{ minHeight: '120px' }}>
+                    <div className="collapse collapse-verticle" id="collapseWidthExample">
+                        <button className={`btn btn-${props.mode === 'info' ? 'info' : 'primary'} my-2`} onClick={handleUpClick}>Uppercase</button>
+                        <button className={`btn btn-${props.mode === 'info' ? 'info' : 'primary'} mx-2`} onClick={handleLowerClick}>Lowercase</button>
+                        <button className={`btn btn-${props.mode === 'info' ? 'info' : 'primary'} mx-2`} onClick={handleTitleCaseClick}>Titlecase</button>
+                        <button className={`btn btn-${props.mode === 'info' ? 'info' : 'primary'} mx-2`} onClick={HandleReverseString}>Inverse Case</button>
+                    </div>
+                </div>
             </div>
-            <div className="container my-3" style={{ color: props.mode === 'dark' ? 'white' : '#06234d' }}>
-                <h3>Your Text Summary</h3>
-                <p>{text.split(" ").length} words {text.length} characters</p>
-                <p>{0.008 * text.split(" ").length} Minutes read</p>
-                <h2>Preview</h2>
-                <p>{text.length > 0 ? text : "Enter something in above textbox to preview here"}</p>
-                <div id="google_translate_element"></div>
+            <div className="container" style={{ color: props.mode === 'info' ? 'white' : '#06234d', marginTop: '-65px' }}>
+                <h3><b>Text Summary</b></h3>
+                <p>{text.length > 0 ? text.split(" ").length : 0} words {text.length} characters</p>
+                <p>{text.length > 0 ? 0.008 * text.split(" ").length : 0} Minutes read</p>
+                <h4 className="text-center"><b>Preview</b></h4>
+                <textarea className="form-control" id="myBox" placeholder="Enter Text Here"
+                    value={text.length > 0 ? text : "Enter something to preview here"}
+                    onChange={handleOnChange} rows="10" readOnly
+                    style={{
+                        backgroundColor: props.mode === 'info' ? '#7b99c5' : '#c2c8d1',
+                        color: props.mode === 'info' ? 'white' : '#06234d',
+                    }}></textarea>
+                {/* <div id="google_translate_element"></div> */}
             </div>
         </>
     )
