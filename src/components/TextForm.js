@@ -27,18 +27,10 @@ export default function TextForm(props) {
         props.alert("Converted to Titlecase!", "success");
     }
 
-    
-    const handleOnText = () => {
-        let newText = text;
-        console.log('newText',newText);
-        // setText(newText);
-        // props.alert("Text Reversed !", "success");
-        // const element = document.querySelector('#myBox');
-        // console.log(element)
-        // element.select();
-        // element.setSelectionRange(0, 99999);
-        // document.execCommand('copy');
-        // props.alert("Text Copied!", "success");
+    const handleCapitalizeClick = () => {
+        let newText = text.toLowerCase().split(' ').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
+        setText(newText);
+        props.alert("Converted to Titlecase!", "success");
     }
 
     const handleCopyClick = () => {
@@ -52,15 +44,28 @@ export default function TextForm(props) {
 
     const handleOnChange = (event) => {
         setText(event.target.value)
-    }   
-    const handleOnChangeReplace = (event) => {
-        ReplaceText(event.target.value)
-    }  
+    }
+    const handleOnChange1 = (event) => {
+        setText(event.target.value)
+    }
     
+
     const HandleReverseString = () => {
         let newText = text.split("").reverse().join("");
         setText(newText);
         props.alert("Text Reversed !", "success");
+    }
+
+    const DashAddedInalphabets = () => {
+        let newText = text.split("").join("-");
+        setText(newText);
+        props.alert("Line Added In Characters!", "success");
+    }
+
+    const DashAddedInWords = () => {
+        let newText = text.split(" ").join("-");
+        setText(newText);
+        props.alert("Line Added In Words!", "success");
     }
 
     const handleRemoveExtraSpaceClick = () => {
@@ -71,15 +76,6 @@ export default function TextForm(props) {
         props.alert("Extra Space Removed !", "success");
     }
 
-    const handleReplaceWord = () => {
-        // let originalString = "The color of the sky changes throughout the day.";
-        // let fText = findText
-        let fText = findText.replace(findText, ReplaceText(findText));
-        console.log(fText);
-        // ReplaceText(newText);
-        props.alert("Extra Space Removed !", "success");
-    }
-    
     const handleRemoveSpaceClick = () => {
         let newText = text.split(" ").join("")
         setText(newText);
@@ -110,40 +106,49 @@ export default function TextForm(props) {
     // }
 
     const [text, setText] = useState('');
-    const [findText, ReplaceText] = useState('');
     return (
         <>
             <div className="container" style={{ color: props.mode === 'info' ? 'white' : '#06234d' }}>
                 <div className="mb-3">
                     <h2 className="text-center">{props.heading}</h2>
                     <textarea className="form-control" placeholder="Enter Text Here"
-                        onChange={handleOnChange} rows="10"
+                        onChange={handleOnChange1} rows="10"
                         style={{
                             backgroundColor: props.mode === 'info' ? '#7b99c5' : 'white',
                             color: props.mode === 'info' ? 'white' : '#06234d'
                         }}></textarea>
-                        <input type="text" value={findText} onClick={handleOnText}
-                        onChange={handleOnChangeReplace}/>
+
                 </div>
-                <button className={`btn btn-${props.mode === 'info' ? 'info' : 'primary'}`} type="button" data-bs-toggle="collapse" data-bs-target="#collapseWidthExample" aria-expanded="false" aria-controls="collapseWidthExample">
+                <button className={`btn btn-${props.mode === 'info' ? 'info' : 'primary'}`} type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseOne" aria-expanded="false" aria-controls="flush-collapseOne">
                     Convert to <span><i className="fa fa-caret-down" aria-hidden="true"></i></span>
                 </button>
-                <button className={`btn btn-${props.mode === 'info' ? 'info' : 'primary'} mx-2`} onClick={handleCopyClick}>Copy</button>
-                <button className={`btn btn-${props.mode === 'info' ? 'info' : 'primary'} mx-2`} onClick={handleClearClick}>Clear</button>
-                <button className={`btn btn-${props.mode === 'info' ? 'info' : 'primary'} mx-2`} onClick={handleRemoveExtraSpaceClick}>Extra Space</button>
-                <button className={`btn btn-${props.mode === 'info' ? 'info' : 'primary'} mx-2`} onClick={handleRemoveSpaceClick}>Remove Space</button>
-                <button className={`btn btn-${props.mode === 'info' ? 'info' : 'primary'} mx-2`} onClick={handleReplaceWord}>Replace Word</button>
+                <button className={`btn btn-${props.mode === 'info' ? 'info' : 'primary'} mx-2`} type="button"
+                    data-bs-toggle="collapse" data-bs-target="#flush-collapseTwo" aria-expanded="false"
+                    aria-controls="flush-collapseTwo">
+                    Analyze <span><i className="fa fa-caret-down" aria-hidden="true"></i></span>
+                </button>
                 <button className={`btn btn-${props.mode === 'info' ? 'info' : 'primary'} mx-2`} id="downloadBtn" onClick={downloadTxtFile} value="download">Download Text</button>
-                <div style={{ minHeight: '120px' }}>
-                    <div className="collapse collapse-verticle" id="collapseWidthExample">
+                <button className={`btn btn-${props.mode === 'info' ? 'info' : 'primary'} mx-1`} onClick={handleCopyClick}>Copy</button>
+                <button className={`btn btn-${props.mode === 'info' ? 'info' : 'primary'} mx-2`} onClick={handleClearClick}>Clear</button>
+                <div id="flush-collapseOne" className="accordion-collapse collapse">
+                    <div className="accordion-body">
                         <button className={`btn btn-${props.mode === 'info' ? 'info' : 'primary'} my-2`} onClick={handleUpClick}>Uppercase</button>
                         <button className={`btn btn-${props.mode === 'info' ? 'info' : 'primary'} mx-2`} onClick={handleLowerClick}>Lowercase</button>
                         <button className={`btn btn-${props.mode === 'info' ? 'info' : 'primary'} mx-2`} onClick={handleTitleCaseClick}>Titlecase</button>
+                        <button className={`btn btn-${props.mode === 'info' ? 'info' : 'primary'} mx-2`} onClick={handleCapitalizeClick}>Capitalize</button>
                         <button className={`btn btn-${props.mode === 'info' ? 'info' : 'primary'} mx-2`} onClick={HandleReverseString}>Inverse Case</button>
                     </div>
                 </div>
+                <div id="flush-collapseTwo" className="accordion-collapse collapse">
+                    <div className="accordion-body my-2">
+                        <button className={`btn btn-${props.mode === 'info' ? 'info' : 'primary'}`} onClick={handleRemoveExtraSpaceClick}>Extra Space</button>
+                        <button className={`btn btn-${props.mode === 'info' ? 'info' : 'primary'} mx-2`} onClick={handleRemoveSpaceClick}>Remove Space</button>
+                        <button className={`btn btn-${props.mode === 'info' ? 'info' : 'primary'} mx-2`} onClick={DashAddedInWords}>Add Line in Words</button>
+                        <button className={`btn btn-${props.mode === 'info' ? 'info' : 'primary'} mx-2`} onClick={DashAddedInalphabets}>Add Line in Characters</button>
+                    </div>
+                </div>
             </div>
-            <div className="container" style={{ color: props.mode === 'info' ? 'white' : '#06234d', marginTop: '-65px' }}>
+            <div className="container my-4" style={{ color: props.mode === 'info' ? 'white' : '#06234d' }}>
                 <h3><b>Text Summary</b></h3>
                 <p>{text.length > 0 ? text.split(" ").length : 0} words {text.length} characters</p>
                 <p>{text.length > 0 ? 0.008 * text.split(" ").length : 0} Minutes read</p>
