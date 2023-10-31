@@ -45,10 +45,6 @@ export default function TextForm(props) {
     const handleOnChange = (event) => {
         setText(event.target.value)
     }
-    const handleOnChange1 = (event) => {
-        setText(event.target.value)
-    }
-    
 
     const HandleReverseString = () => {
         let newText = text.split("").reverse().join("");
@@ -112,7 +108,7 @@ export default function TextForm(props) {
                 <div className="mb-3">
                     <h2 className="text-center">{props.heading}</h2>
                     <textarea className="form-control" placeholder="Enter Text Here"
-                        onChange={handleOnChange1} rows="10"
+                        onChange={handleOnChange} rows="10"
                         style={{
                             backgroundColor: props.mode === 'info' ? '#7b99c5' : 'white',
                             color: props.mode === 'info' ? 'white' : '#06234d'
